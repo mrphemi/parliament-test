@@ -1,0 +1,131 @@
+// colors
+$color-brand: #373151;
+$color-grey-1: #f4f1f1;
+$color-grey-2: #4d4d4d;
+$color-alert: #a72326;
+$color-background: #ffffff;
+
+// breakpoints
+$bp-large: 501px;
+
+@mixin typography($type) {
+  @if $type == primary {
+    font-size: 26px;
+    line-height: 1.25rem;
+
+    @media (min-width: $bp-large) {
+      font-size: 30px;
+    }
+  } @else if $type == secondary {
+    font-size: 20px;
+    line-height: 1.35rem;
+
+    @media (min-width: $bp-large) {
+      font-size: 22px;
+    }
+  } @else if $type == tertiary {
+    font-size: 18px;
+    line-height: 1.5rem;
+
+    @media (min-width: $bp-large) {
+      font-size: 18px;
+    }
+  } @else {
+    @warn "Unknown typography type: #{$type}";
+  }
+}
+
+html {
+  font-family: Verdana, Arial, sans-serif;
+}
+
+p {
+  margin: 0;
+}
+
+body {
+  background-color: $color-grey-1;
+}
+
+main {
+  padding-inline: 15px;
+  padding-top: 30px;
+}
+
+.member-card {
+  background-color: $color-background;
+  border-top: 5px solid $color-brand;
+  display: flex;
+  gap: 15px;
+  padding: 15px 15px 10px;
+
+  @media screen and (min-width: $bp-large) {
+    padding: 20px 20px 15px;
+    width: 450px;
+    margin-inline: auto;
+    flex-direction: column;
+    gap: 20px;
+    border-top: 0;
+    border-left: 5px solid $color-brand;
+  }
+
+  &[data-status="active"] {
+    .member-card__status {
+      display: none;
+    }
+  }
+
+  &__info {
+    width: 100%;
+  }
+
+  &__image {
+    border: 3px solid $color-alert;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+
+    @media screen and (min-width: $bp-large) {
+      border-width: 5px;
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  &__party {
+    color: $color-grey-2;
+    @include typography(secondary);
+  }
+
+  &__name {
+    color: $color-brand;
+    font-weight: bold;
+    margin-top: 5px;
+    @include typography(primary);
+    @media screen and (min-width: $bp-large) {
+      margin-top: 15px;
+    }
+  }
+
+  &__constituency {
+    color: $color-grey-2;
+    margin-top: 15px;
+    @include typography(tertiary);
+    @media screen and (min-width: $bp-large) {
+      margin-top: 20px;
+    }
+  }
+
+  &__status {
+    background-color: $color-grey-1;
+    color: $color-alert;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    @include typography(tertiary);
+    @media screen and (min-width: $bp-large) {
+      padding: 15px;
+    }
+  }
+}
