@@ -70,7 +70,7 @@ main {
   }
 
   &[data-status="active"] {
-    .member-card__status {
+    .member-card__inactive {
       display: none;
     }
   }
@@ -116,7 +116,7 @@ main {
     }
   }
 
-  &__status {
+  &__inactive {
     background-color: $color-grey-1;
     color: $color-alert;
     font-weight: bold;

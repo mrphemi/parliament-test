@@ -31,6 +31,9 @@ class Main {
     console.log(this.verificationLog);
 
     const searchParams = new URLSearchParams(window.location.search);
+    if (!searchParams.has("member_id")) {
+      window.location.search = "?member_id=4514";
+    }
     const memberId = searchParams.get("member_id");
     this.getMember(memberId ? Number(memberId) : null);
   }
