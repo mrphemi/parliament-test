@@ -43,13 +43,12 @@ class Main {
    * @param memberId The member ID to fetch
    */
   async getMember(memberId: number | null) {
-    if (isNaN(Number(memberId)) || memberId === null) {
-      throw new Error("Invalid member ID: Member Id must be a number");
-    }
-
     try {
-      const res = await fetch(`${this.baseUrl}/Members/${memberId}
-  `);
+      if (isNaN(Number(memberId)) || memberId === null) {
+        throw new Error("Invalid member ID: Member Id must be a number");
+      }
+
+      const res = await fetch(`${this.baseUrl}/Members/${memberId}`);
 
       if (res.ok) {
         const data: MemberApiResponse = await res.json();
