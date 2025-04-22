@@ -20,15 +20,26 @@ type Member = {
   membershipEndDate: string | null;
 };
 
+const member: HTMLElement = document.querySelector(".member-card");
+const memberName = document.querySelector(".member-card__name");
+const memberParty = document.querySelector(".member-card__party");
+const memberConstituency = document.querySelector(".member-card__constituency");
+const memberImage: HTMLImageElement = document.querySelector(
+  ".member-card__image"
+);
+
 /** Our main application class, extend this as needed. */
 class Main {
   private readonly verificationLog: string = "Hello world!";
   private baseUrl = "https://members-api.parliament.uk/api";
+  private loading = false;
 
   constructor() {
     // Verify the application is running as intended by viewing this log in your
     // browser's development console. Feel free to delete this log once confirmed.
     console.log(this.verificationLog);
+
+    this.loading = true;
 
     const searchParams = new URLSearchParams(window.location.search);
     if (!searchParams.has("member_id")) {
@@ -36,22 +47,28 @@ class Main {
     }
     const memberId = searchParams.get("member_id");
     this.getMember(memberId ? Number(memberId) : null);
+    this.loading = false;
   }
-
   /**
    * Fetches a member by their ID and displays their details
    * @param memberId The member ID to fetch
    */
+
   async getMember(memberId: number | null) {
     try {
       if (isNaN(Number(memberId)) || memberId === null) {
         throw new Error("Invalid member ID: Member Id must be a number");
       }
 
+      if (this.loading) {
+        member.dataset.fetching = "true";
+      }
+
       const res = await fetch(`${this.baseUrl}/Members/${memberId}`);
 
       if (res.ok) {
         const data: MemberApiResponse = await res.json();
+        member.dataset.fetching = "false";
         this.displayMemberDetails({
           name: data.value.nameDisplayAs,
           party: data.value.latestParty.name,
@@ -61,17 +78,17 @@ class Main {
         });
       } else {
         const errorText = await res.text();
-        console.error(`Error: ${res.status} - ${errorText}`);
+        throw Error(`Error: ${res.status} - ${errorText}`);
       }
     } catch (error) {
       console.error("Cannot fetch member data:", error);
     }
   }
-
   /**
    * Displays member details in the HTML
    * @param memberData The member data to display
    */
+
   displayMemberDetails({
     name,
     party,
@@ -79,16 +96,6 @@ class Main {
     constituency,
     membershipEndDate,
   }: Member) {
-    const member: HTMLElement = document.querySelector(".member-card");
-    const memberName = document.querySelector(".member-card__name");
-    const memberParty = document.querySelector(".member-card__party");
-    const memberConstituency = document.querySelector(
-      ".member-card__constituency"
-    );
-    const memberImage: HTMLImageElement = document.querySelector(
-      ".member-card__image"
-    );
-
     memberImage.src = image;
     memberName.textContent = name;
     memberParty.textContent = party;

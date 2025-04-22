@@ -8,6 +8,8 @@ $color-background: #ffffff;
 // breakpoints
 $bp-large: 501px;
 
+$animation-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
 @mixin typography($type) {
   @if $type == primary {
     font-size: 26px;
@@ -32,6 +34,20 @@ $bp-large: 501px;
     }
   } @else {
     @warn "Unknown typography type: #{$type}";
+  }
+}
+
+@mixin loading($width) {
+  width: $width;
+  height: 24px;
+  opacity: 0.4;
+  background-color: $color-grey-2;
+  animation: $animation-pulse;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
   }
 }
 
@@ -72,6 +88,22 @@ main {
   &[data-status="active"] {
     .member-card__inactive {
       display: none;
+    }
+  }
+
+  &[data-fetching="true"] {
+    .member-card__party,
+    .member-card__name,
+    .member-card__constituency {
+      @include loading(100px);
+    }
+
+    .member-card__name {
+      @include loading(170px);
+    }
+
+    .member-card__constituency {
+      @include loading(140px);
     }
   }
 
